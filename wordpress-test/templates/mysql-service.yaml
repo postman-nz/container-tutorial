@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "wordpress-test-database-name" . }}
+  labels:
+    app: {{ template "wordpress-test.name" . }}
+    chart: {{ template "wordpress-test.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.database.port }}
+      protocol: TCP
+  selector:
+    app: {{ template "wordpress-test-database-name" . }}
+    release: {{ .Release.Name }}

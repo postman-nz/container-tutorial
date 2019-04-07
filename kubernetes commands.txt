@@ -1,0 +1,21 @@
+cd kubernetes-test
+
+# Create the MySQL Deployment and Service
+kubectl apply -f mysql-deployment.yaml
+kubectl apply -f mysql-service.yaml
+
+
+# Create the Wordpress Deployment and Service
+kubectl apply -f wordpress-service.yaml
+kubectl apply -f wordpress-deployment.yaml
+
+# check they're running, access blog at
+http://localhost:30001
+
+
+
+kubectl delete deployments mysql-deployment
+kubectl delete deployments wordpress-deployment
+
+kubectl delete service blog
+kubectl delete service database

@@ -1,0 +1,42 @@
+cd helm-test
+
+# First install our single database host
+helm install -n test-database database-chart
+
+# Setup our first blog
+helm install -f blog1-values.yaml -n blog1 wordpress-chart
+# http://localhost:30002
+
+# Deploy our second blod
+helm install -f blog2-values.yaml -n blog2 wordpress-chart
+# http://localhost:30003
+
+# Deploy our third blog
+helm install -f blog3-values.yaml -n blog3 wordpress-chart
+# http://localhost:30004
+
+# Install a second Database
+helm install -n dev-database database-chart
+
+
+
+# For run, create 10 different 
+for x in `seq 30005 30015`; do helm install -n dev-blog$x --set service.nodePort=$x --set database.host=dev-database-database-chart ./wordpress-chart; done
+
+
+# Now check sites on http://localhost:30005 - 30015
+
+# Now Delete the old database, and blogs
+helm del --purge blog1
+helm del --purge blog2
+helm del --purge blog3
+helm del --purge test-database
+
+#Ensure some of the new sites still work
+
+
+# Clean up all the releases
+for x in `seq 30005 30015`; do helm del --purge dev-blog$x; done
+
+# Delete the second database
+helm del --purge dev-database

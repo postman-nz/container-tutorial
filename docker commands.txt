@@ -1,0 +1,43 @@
+# Check running pods
+docker ps
+
+# Setup MySQL Running localling
+docker run \
+--name wordpress-test-mysql \
+-e MYSQL_ROOT_PASSWORD=secure-password \
+-e MYSQL_DATABASE=wordpressdb \
+-e MYSQL_USER=wordpress \
+-e MYSQL_PASSWORD=password01 \
+-p 3306:3306 \
+-d mysql:5.7
+
+# Setup Wordpress - NOTE: host.docker.internal is to reference the host docker is running on, which we have a port opened for mysql
+docker run \
+--name wordpress-test-server \
+-e WORDPRESS_DB_HOST=host.docker.internal:3306 \
+-e WORDPRESS_DB_USER=wordpress \
+-e WORDPRESS_DB_PASSWORD=password01 \
+-e WORDPRESS_DB_NAME=wordpressdb \
+-e WORDPRESS_TABLE_PREFIX=site1 \
+-p 8080:80 \
+-d wordpress
+
+# run a second instance of wordpress
+docker run \
+--name wordpress-test-server-2 \
+-e WORDPRESS_DB_HOST=host.docker.internal:3306 \
+-e WORDPRESS_DB_USER=wordpress \
+-e WORDPRESS_DB_PASSWORD=password01 \
+-e WORDPRESS_DB_NAME=wordpressdb \
+-e WORDPRESS_TABLE_PREFIX=site2 \
+-p 8081:80 \
+-d wordpress
+
+# Get a shell into the wordpress server
+docker exec -it wordpress-test-server-2 /bin/bash
+
+# Stop and Remove the test pods
+docker rm $(docker stop $(docker ps -a -q  --filter name="wordpress*"))
+
+# Check Running pods
+docker ps

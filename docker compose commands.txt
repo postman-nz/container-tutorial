@@ -1,0 +1,9 @@
+cd docker-compose
+
+# Check running containers
+docker ps
+
+# Start the blog (Ctrl + C to stop, or add -d to run in the background)
+docker-compose up
+
+

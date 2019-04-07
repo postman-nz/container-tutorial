@@ -1,0 +1,5 @@
+service:
+    nodePort: 30004
+
+database:
+    name: wordpressdb2

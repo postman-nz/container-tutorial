@@ -1,0 +1,39 @@
+version: '3.3'
+
+services:
+   mysql:
+     image: mysql:5.7
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: securepassword
+       MYSQL_DATABASE: wordpressdb
+       MYSQL_USER: wordpressuser
+       MYSQL_PASSWORD: password01
+
+   wordpress_site1:
+     depends_on:
+       - mysql
+     image: wordpress:latest
+     ports:
+       - "8000:80"
+     restart: always
+     environment:
+       WORDPRESS_DB_HOST: mysql:3306
+       WORDPRESS_DB_USER: wordpressuser
+       WORDPRESS_DB_PASSWORD: password01
+       WORDPRESS_DB_NAME: wordpressdb
+       WORDPRESS_TABLE_PREFIX: site1
+
+   wordpress_site2:
+     depends_on:
+       - mysql
+     image: wordpress:latest
+     ports:
+       - "8001:80"
+     restart: always
+     environment:
+       WORDPRESS_DB_HOST: mysql:3306
+       WORDPRESS_DB_USER: wordpressuser
+       WORDPRESS_DB_PASSWORD: password01
+       WORDPRESS_DB_NAME: wordpressdb
+       WORDPRESS_TABLE_PREFIX: site2

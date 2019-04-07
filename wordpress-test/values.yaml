@@ -1,0 +1,10 @@
+name: database
+image:
+  repository : mysql
+  version: 5.7
+port: 3306
+defaults:
+  rootpassword: secure-password
+  database: wordpressdb
+  username: wordpress
+  password: password01
